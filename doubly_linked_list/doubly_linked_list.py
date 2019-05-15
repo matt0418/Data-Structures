@@ -56,13 +56,14 @@ class DoublyLinkedList:
       self.length +=1
 
   def remove_from_head(self):
-    if not self.head:
+    if self.head == None:
       return None
 
-    elif not self.head.next:
+    elif self.head == self.tail:
       head = self.head
       self.head = None
       self.tail = None
+      self.length -= 1
       return head.value
     else:
       self.head.delete()
@@ -81,34 +82,57 @@ class DoublyLinkedList:
       self.length += 1 
     
   def remove_from_tail(self):
-    if not self.tail:
+    if self.head == None or self.tail == None:
       return None
-
-    elif not self.head.next:
-      head = self.head
-      self.head = None
-      self.tail = None
-      return head.value
-
-    else:
-      self.tail.delete()
-      self.tail = self.tail.prev
-      self.length -= 1
-
+    tail = self.tail
+    self.delete(tail)
+    return tail.value
+    
   def move_to_front(self, node):
-    pass
+    if self.head == None or self.tail == None:
+      return None
+    elif self.tail == self.head:
+      return None
+    else:
+      self.delete(node)
+      self.add_to_head(node.value)
+
 
   def move_to_end(self, node):
-    pass
+    if self.head == None or self.tail == None:
+      return None
+    elif self.head == self.tail:
+      return None
+    else:
+      self.delete(node)
+      self.add_to_tail(node.value)
+
 
   def delete(self, node):
     if self.head == None:
       return None
+    self.length -= 1
     prev_item = node.prev
     next_item = node.next
     node.prev = None
     node.next = None
-    
+    if prev_item:
+      prev_item.next = next_item
+    if next_item:
+      next_item.prev = prev_item
+    if node == self.head:
+      self.head = next_item
+    if node == self.tail:
+      self.tail = prev_item
+
     
   def get_max(self):
-    pass
+    if self.head == None or self.tail == None:
+      return None
+    max = 0
+    current = self.head
+    while current:
+      if current.value > max:
+        max = current.value
+      current = current.next
+    return max
